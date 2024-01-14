@@ -35,9 +35,11 @@ export const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: secondary,
+        width: .7 * screenWidth,
+        alignItems: "center",
         padding: 20,
         margin: 20,
-        borderRadius: 5,
+        borderRadius: 10,
     },
 
     subButton: {

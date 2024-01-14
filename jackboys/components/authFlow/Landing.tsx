@@ -16,7 +16,7 @@ export default function Landing({navigation}: LandingProps){
     return (
         <BasePage>
             <Image source={require('../images/icon.png')} style={styles.image}></Image>
-            <Text style={styles.h1}>Welcome to Jack(ed) Boys </Text>
+            <Text style={styles.h1}>Welcome to Jackboys </Text>
             <Text style={styles.h1}>Select to get started</Text>
             <TouchableOpacity onPress={() => route(navigation, "Login")} style={styles.button}>
                 <Text style={styles.buttonText}>Login</Text>

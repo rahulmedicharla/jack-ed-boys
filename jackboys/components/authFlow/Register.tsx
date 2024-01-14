@@ -3,13 +3,14 @@ import { Text, TouchableOpacity, View, TextInput } from "react-native";
 import BasePage from "../BasePage";
 import { styles } from "../Styles";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { createNewUser } from "../../backend/db_helper";
+import { authResponse, createUser } from "../../backend/auth_helper";
 
 export default function Register(){
 
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [username, setUsername] = useState("");
     const [error, setError] = useState("");
 
     const handleRegister = () => {
@@ -17,13 +18,16 @@ export default function Register(){
         if (password !== confirmPassword){
             setError("Passwords do not match");
             return;
-        }else if (username.includes("@") == false){
+        }else if (email.includes("@") == false){
             setError("Please enter a valid email");
             return;
         }
 
-        createNewUser(username, password)
-
+        createUser(email, password, username).then((response: authResponse) => {
+            if (response.status == "error"){
+                setError(response.error);
+            }
+        })
     }
 
     return (
@@ -39,6 +43,12 @@ export default function Register(){
                         style={styles.input}
                         placeholder="Email"
                         keyboardType="email-address"
+                        value={email}
+                        onChangeText={(text) => setEmail(text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Username"
                         value={username}
                         onChangeText={(text) => setUsername(text)}
                     />
@@ -49,7 +59,6 @@ export default function Register(){
                         value={password}
                         onChangeText={(text) => setPassword(text)}
                     />
-
                     <TextInput
                         style={styles.input}
                         placeholder="Confirm Password"

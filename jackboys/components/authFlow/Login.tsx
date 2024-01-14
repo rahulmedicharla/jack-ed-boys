@@ -2,26 +2,27 @@ import React, { useState } from "react";
 import { View, TextInput, Button, Text, TouchableOpacity } from "react-native";
 import BasePage from "../BasePage";
 import { styles } from "../Styles";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { login } from "../../backend/auth_helper";
 
 export default function Login() {
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const auth = getAuth();
-
     const handleLogin = () => {
 
-        if (username.includes("@") == false) {
+        if (email.includes("@") == false) {
             setError("Please enter a valid email");
             return;
         }
 
-        signInWithEmailAndPassword(auth, username, password).catch((error) => {
-            setError(error.message);
-        });
+        login(email, password).then((response) => {
+            if (response.status == "error") {
+                setError(response.error);
+            }
+        })
+        
     };
 
     return (
@@ -36,8 +37,8 @@ export default function Login() {
                         style={styles.input}
                         placeholder="Email"
                         keyboardType="email-address"
-                        value={username}
-                        onChangeText={(text) => setUsername(text)}
+                        value={email}
+                        onChangeText={(text) => setEmail(text)}
                     />
                     <TextInput
                         style={styles.input}
