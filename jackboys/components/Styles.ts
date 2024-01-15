@@ -19,6 +19,17 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
     },
 
+    leftContainer: {
+        flexDirection: "column",
+        width: .9 * screenWidth,
+        justifyContent: "flex-start",
+        margin: 15,
+        gap: 15,
+        backgroundColor: tertiaryGreen,
+        padding: 12,
+        borderRadius: 10,
+    },
+
     rightContainer: {
         flexDirection: "row",
         width: .9 * screenWidth,
@@ -33,6 +44,13 @@ export const styles = StyleSheet.create({
         marginBottom: 20,
         color: white,
     },
+
+    h2: {
+        fontSize: 20,
+        color: white,
+        fontWeight: "bold",
+    },
+
     button: {
         backgroundColor: secondary,
         width: .7 * screenWidth,
@@ -71,7 +89,7 @@ export const styles = StyleSheet.create({
         backgroundColor: white,
         padding: 10,
         borderRadius: 5,
-        width: .63 * screenWidth,
+        width: .56 * screenWidth,
     },
 
     error: {
