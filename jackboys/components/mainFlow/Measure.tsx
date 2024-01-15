@@ -1,43 +1,66 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import BasePage from "../BasePage";
 import { styles, screenWidth, screenHeight, tertairyRed, tertiaryGreen, tertiaryYellow, secondary, white, primary } from "../Styles";
 import { LineChart } from "react-native-chart-kit";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { addEntry, retreiveEntries } from "../../backend/db_helper";
+import { DisplayEntry, User, addEntry, dbReturnType } from "../../backend/db_helper";
+import { Entry } from "../../backend/db_helper";
+import moment from "moment";
 
-export default function Measure(){
+type MeasureProps = {
+    user: User,
+    memoizedSetUser: Dispatch<SetStateAction<User>>
+}
 
-    const [labels, setLabels] = useState<string[]>();
-    const [weights, setWeights] = useState();
+export default function Measure({user, memoizedSetUser}: MeasureProps){
 
-    const [newEntryVisible, setNewEntryVisible] = useState(false);
-    const [newEntryWeight, setNewEntryWeight] = useState("");
+    const [displayEntries, setDisplayEntries] = useState<DisplayEntry>(null);
 
+    const [newEntry, setNewEntry] = useState<Entry>({
+        status: false,
+        date: null,
+        weight: null
+    });
+    
     useEffect(() => {
-        const relativeLabels = []
-        for (let i = -6; i <= 3; i++){
-            const data = new Date();
-            data.setDate(data.getDate() + i);
-            
-            relativeLabels.push((data.getMonth() + 1) + "/" + data.getDate());
-        }
+        const currentLabels = [];
+        const currentWeights = [];
+        const lastWeek = moment().subtract(7, 'days')
 
-        retreiveEntries().then((entries) => {
-            setWeights(entries);
+        user.entries.forEach((entry) => {
+            if (moment(entry.date).isAfter(lastWeek)){
+                currentLabels.push(moment(entry.date).format("MM/DD"))
+                currentWeights.push(entry.weight)
+            }
         })
 
-        setLabels(relativeLabels);
-    }, [])
+        setDisplayEntries({
+            date: currentLabels,
+            weight: currentWeights
+        })
+
+    }, [user])
 
     const handleAddEntry = () => {
-        setNewEntryVisible(true);
+        setNewEntry({
+            ...newEntry,
+            status: true,
+        })
     }
 
     const handleAddEntrySubmit = () => {
-        addEntry(newEntryWeight);
-        setNewEntryWeight("");
-        setNewEntryVisible(false);
+        addEntry(newEntry.weight, user.uid).then((response) => {
+            memoizedSetUser({
+                ...user,
+                entries: [...user.entries, response.data]
+            })
+        });
+        setNewEntry({
+            status: false,
+            date: null,
+            weight: null
+        })
     }
 
     return (
@@ -49,19 +72,13 @@ export default function Measure(){
                 
                 <Text style={styles.h1}>Measure weight progress</Text>
                 
-                <LineChart
+                {displayEntries ? (
+                    <LineChart
                     data={{
-                    labels: labels!,
+                    labels: displayEntries.date,
                     datasets: [
                         {
-                        data: [
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100
-                        ]
+                        data: displayEntries.weight
                         }
                     ]
                     }}
@@ -90,10 +107,16 @@ export default function Measure(){
                     borderRadius: 10
                     }}
                 />
+                ):null}
 
-                {newEntryVisible ? (
+                {newEntry.status ? (
                     <View style={styles.rightContainer}>
-                        <TextInput style={styles.subInput} keyboardType="decimal-pad" onChangeText={(text) => setNewEntryWeight(text)} value={newEntryWeight} placeholder="--- lbs">
+                        <TextInput style={styles.subInput} keyboardType="decimal-pad" onChangeText={(text) => {setNewEntry(
+                            {
+                                ...newEntry,
+                                weight: text
+                            }
+                        )}} value={newEntry.weight} placeholder="--- lbs">
                         </TextInput>
                         <TouchableOpacity style={styles.subButton} onPress={() => handleAddEntrySubmit()}>
                             <Text style={styles.subButtonText}>Submit</Text>

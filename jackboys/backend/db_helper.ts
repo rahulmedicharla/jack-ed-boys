@@ -1,5 +1,29 @@
 import { UserCredential, createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import {getFirestore, doc, setDoc, getDoc} from "firebase/firestore";
+import moment from "moment";
+
+export type Entry = {
+    status?: boolean,
+    date: string | null,
+    weight: string | null
+}
+
+export type DisplayEntry = {
+    date: string[],
+    weight: number[]
+} | null
+
+export type User = {
+    username: string,
+    uid: string,
+    entries: Entry[]
+} | null;
+
+export type dbReturnType = {
+    status: 'success' | 'error',
+    error?: string,
+    data?: any
+}
 
 export const createNewUserDocument = async (user: UserCredential, username: string) => {
     const auth = getAuth();
@@ -11,33 +35,29 @@ export const createNewUserDocument = async (user: UserCredential, username: stri
     })
 };
 
-export const retreiveEntries = async () => {
+export const readUserDoc = async (uid: string) => {
     const db = getFirestore()
-    const auth = getAuth();
-
-    const uid = auth.currentUser!.uid;
-
+    
     const docRef = doc(db, "Users", uid);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
         const data = docSnap.data();
-        const entries = data.entries;
-
-        if (entries == undefined){
-            return []
-        } else {
-            return entries
+        return {
+            status: 'success',
+            data: data
+        }
+    }else{
+        return {
+            status: 'error',
+            error: 'User does not exist'
         }
     }
 
 }
 
-export const addEntry = async (weight: string) => {
+export const addEntry = async (weight: string, uid: string) => {
     const db = getFirestore()
-    const auth = getAuth();
-
-    const uid = auth.currentUser!.uid;
 
     const docRef = doc(db, "Users", uid);
     const docSnap = await getDoc(docRef);
@@ -45,6 +65,7 @@ export const addEntry = async (weight: string) => {
     if (docSnap.exists()) {
         const data = docSnap.data();
         const entries = data.entries;
+        const currentMoment = moment().toDate().toISOString()
 
         if (entries == undefined){
             await setDoc(docRef, {
@@ -52,20 +73,37 @@ export const addEntry = async (weight: string) => {
                 entries: [
                     {
                         weight: weight,
-                        date: new Date()
+                        date: currentMoment
                     }
                 ]
             }, {merge: true})
+
+            return {
+                status: 'success',
+                data: {
+                    weight: weight,
+                    date: currentMoment
+                }
+            }
         } else {
             await setDoc(docRef, {
+                ...data,
                 entries: [
                     ...entries,
                     {
                         weight: weight,
-                        date: new Date()
+                        date: currentMoment
                     }
                 ]
             }, {merge: true})
+
+            return {
+                status: 'success',
+                data: {
+                    weight: weight,
+                    date: currentMoment
+                }
+            }
         }
     }
 
