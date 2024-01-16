@@ -16,7 +16,8 @@ export type DisplayEntry = {
 export type User = {
     username: string,
     uid: string,
-    entries: Entry[]
+    entries: Entry[],
+    openaikey: string | null
 } | null;
 
 export type dbReturnType = {
@@ -54,6 +55,38 @@ export const readUserDoc = async (uid: string) => {
         }
     }
 
+}
+
+export const updateOpenaiKey = async (uid: string, key: string): Promise<dbReturnType> => {
+    const db = getFirestore()
+
+    const docRef = doc(db, "Users", uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        try{
+            const data = docSnap.data();
+            await setDoc(docRef, {
+                ...data,
+                openaikey: key
+            }, {merge: true})
+
+            return {
+                status: 'success',
+            }
+
+        }catch(error){
+            return {
+                status: 'error',
+                error: error.message
+            }
+        }
+    }else{
+        return {
+            status: 'error',
+            error: 'User does not exist'
+        }
+    }
 }
 
 export const addEntry = async (weight: string, uid: string) => {

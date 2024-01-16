@@ -17,6 +17,7 @@ export const styles = StyleSheet.create({
         backgroundColor: primary,
         alignItems: "center",
         justifyContent: "center",
+        paddingTop: 50,
     },
 
     leftContainer: {

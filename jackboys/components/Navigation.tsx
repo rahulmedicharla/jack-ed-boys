@@ -33,6 +33,7 @@ export default function Navigation() {
       uid: uid,
       username: userData.data.username,
       entries: userData.data.entries ? userData.data.entries : [],
+      openaikey: userData.data.openaikey ? userData.data.openaikey : null,
     });
 
   }
@@ -71,7 +72,9 @@ export default function Navigation() {
               )}} component={Meal} />
               <HomeTab.Screen name="Profile" options = {{headerShown: false, tabBarLabel: "Profile", tabBarIcon: ({color, size}) => (
                 <MaterialIcons name="person" size={size} color={color} />
-              )}} component={Profile} /> 
+              )}}>
+                {() => <Profile user={user} memoizedSetUser={memoizedSetUser} />}
+                </HomeTab.Screen> 
             </HomeTab.Navigator>
           </NavigationContainer>
       ) : (

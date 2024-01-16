@@ -33,7 +33,6 @@ export default function Register(){
     return (
         <BasePage>
             <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }} 
-                contentContainerStyle={styles.container}
                 scrollEnabled={false}>
 
                 <View style={styles.container}>
