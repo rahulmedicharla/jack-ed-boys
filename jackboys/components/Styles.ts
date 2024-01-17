@@ -9,6 +9,13 @@ const lightPrimary = "#5e5869";
 
 const white = "#FFFFFF";
 
+const dark = "#6D6875"
+const primaryRed = "#B5838D"
+const highlightOrange = "#D69AA6" 
+const specialSalmon = "#FFB4A2"
+const brightYellow = "#FFCDB2"
+const brightRed = "FF6D6F"
+
 const screenWidth = 390; 
 const screenHeight = 844;
 
@@ -17,6 +24,12 @@ export const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+    },
+
+    gappedContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "space-between",
     },
 
     leftContainer: {
@@ -39,10 +52,10 @@ export const styles = StyleSheet.create({
     },
 
     h1: {
-        fontSize: 24,
+        fontSize: 41,
         fontWeight: "bold",
-        marginBottom: 20,
-        color: white,
+        margin: 5,
+        color: highlightOrange,
     },
 
     h2: {
@@ -52,17 +65,19 @@ export const styles = StyleSheet.create({
     },
 
     h3: {
-        fontSize: 13,
+        fontSize: 15,
         color: white,
-      
+        margin: 5,
     },
+
+
     button: {
-        backgroundColor: secondary,
+        backgroundColor: highlightOrange,
         width: .7 * screenWidth,
         alignItems: "center",
-        padding: 20,
+        padding: 30,
         margin: 20,
-        borderRadius: 10,
+        borderRadius: 15,
     },
 
     subButton: {

@@ -12,7 +12,7 @@ export default function BasePage({ children }: BasePageProps) {
     return (
         <LinearGradient
         // Background Linear Gradient
-        colors={['rgba(55, 49, 65, 1)', 'rgba(55, 30, 65, .5)']}
+        colors={['rgba(33, 28, 41, 1)', 'rgba(55, 30, 65, .5)']}
         style={{flex: 1}}
         >
             <SafeAreaView style={styles.container}>

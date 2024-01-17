@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import BasePage from "../BasePage";
 import { styles } from "../Styles";
 import { Image } from "react-native";
@@ -15,15 +15,21 @@ export default function Landing({navigation}: LandingProps){
 
     return (
         <BasePage>
-            <Image source={require('../images/icon.png')} style={styles.image}></Image>
-            <Text style={styles.h1}>Welcome to Jackboys </Text>
-            <Text style={styles.h1}>Select to get started</Text>
-            <TouchableOpacity onPress={() => route(navigation, "Login")} style={styles.button}>
-                <Text style={styles.buttonText}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => route(navigation, "Register")} style={styles.button}>
-                <Text style={styles.buttonText}>Register</Text>
-            </TouchableOpacity>
+            <View style={styles.gappedContainer}>
+                <View style={styles.container}>
+                    <Text style={styles.h1}>Welcome to</Text>
+                    <Text style={styles.h1}>Jackboys</Text>
+                    <Text style={styles.h3}>Achieve your goals today</Text>    
+                </View>
+                <View style={styles.container}>
+                    <TouchableOpacity onPress={() => route(navigation, "Login")} style={styles.button}>
+                    <Text style={styles.buttonText}>Login</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => route(navigation, "Register")} style={styles.button}>
+                    <Text style={styles.buttonText}>Register</Text>
+                </TouchableOpacity>
+                </View>
+            </View>
         </BasePage>
     );
 };
