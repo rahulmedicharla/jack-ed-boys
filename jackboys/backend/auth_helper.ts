@@ -14,16 +14,30 @@ export type authResponse = {
     user: UserCredential | null
 }
 
+export type registerUser = {
+    status: 'acctInformation' | 'personalInformation',
+    email: string,
+    password: string,
+    confirmPassword: string,
+    username: string,
+    goal?: 'cut' | 'bulk' | 'maintain',
+    height?: string,
+    weight?: string,
+    gender?: 'male' | 'female',
+    age?: string,
+    activityLevel?: 'none' | 'light' | 'moderate' | 'heavy',
+} | null
+
 export const route = (navigation: NavigationProp<RootStackParamList>, destination: keyof RootStackParamList) => {
     navigation.navigate(destination);
 }
 
-export const createUser = async (email: string, password: string, username: string) => {
+export const createUser = async (registerUser: registerUser) => {
     const auth = getAuth();
 
     try{
-        const user = await createUserWithEmailAndPassword(auth, email, password);
-        await createNewUserDocument(user, username);
+        const user = await createUserWithEmailAndPassword(auth, registerUser.email, registerUser.password);
+        await createNewUserDocument(user, registerUser);
         return {
             status: "success",
             error: null,

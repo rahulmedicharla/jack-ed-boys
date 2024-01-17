@@ -1,6 +1,7 @@
 import { UserCredential, createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import {getFirestore, doc, setDoc, getDoc} from "firebase/firestore";
 import moment from "moment";
+import { registerUser } from "./auth_helper";
 
 export type Entry = {
     status?: boolean,
@@ -25,6 +26,7 @@ export type User = {
         weight?: number,
         gender?: 'male' | 'female',
         goal?: 'cut' | 'bulk' | 'maintain',
+        activityLevel?: 'none' | 'light' | 'moderate' | 'heavy',
     } | null
 } | null;
 
@@ -34,13 +36,52 @@ export type dbReturnType = {
     data?: any
 }
 
-export const createNewUserDocument = async (user: UserCredential, username: string) => {
-    const auth = getAuth();
+const calculateCalorieCount = (registerUser: registerUser) => {
+    const weightInKg = parseFloat(registerUser.weight) * 0.453592
+    const heightInCm = parseFloat(registerUser.height.split(".")[0]) * 30.48 + parseFloat(registerUser.height.split(".")[1]) * 2.54
+    let BMR = 0
+    if (registerUser.gender == 'male'){
+        BMR = 66.5 + (13.75 * weightInKg) + (5.003 * heightInCm) - (6.755 * parseInt(registerUser.age))
+    }else{
+        BMR = 655.1 + (9.563 * weightInKg) + (1.85 * heightInCm) - (4.676 * parseInt(registerUser.age))
+    }
+
+    if (registerUser.activityLevel == 'none'){
+        BMR *= 1.2
+    }else if (registerUser.activityLevel == 'light'){
+        BMR *= 1.375
+    }else if (registerUser.activityLevel == 'moderate'){
+        BMR *= 1.55
+    }else if (registerUser.activityLevel == 'heavy'){
+        BMR *= 1.725
+    }
+
+    if (registerUser.goal == 'cut'){
+        BMR -= 300
+    }else if (registerUser.goal == 'bulk'){
+        BMR += 300
+    }
+
+    return BMR
+}
+
+export const createNewUserDocument = async (user: UserCredential, registerUser: registerUser) => {
     const db = getFirestore();
 
+    const calorieCount = calculateCalorieCount(registerUser) 
+
     await setDoc(doc(db, "Users", user.user.uid), {
-        username: username,
-        uid: user.user.uid
+        username: registerUser.username,
+        uid: user.user.uid,
+        calorieInformation: {
+            calorieCount: calorieCount,
+            age: registerUser.age,
+            height: registerUser.height,
+            weight: registerUser.weight,
+            gender: registerUser.gender,
+            goal: registerUser.goal,
+            activityLevel: registerUser.activityLevel,
+        }
     })
 };
 

@@ -43,12 +43,12 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
     },
 
-    rightContainer: {
+    horizontalContainer: {
         flexDirection: "row",
         width: .9 * screenWidth,
-        justifyContent: "center",
+        justifyContent: "space-evenly",
         margin: 15,
-        gap: 15,
+        alignItems: "center",
     },
 
     h1: {
@@ -68,6 +68,8 @@ export const styles = StyleSheet.create({
         fontSize: 15,
         color: white,
         margin: 5,
+        justifyContent: 'center',
+        lineHeight: 20,
     },
 
 
@@ -102,9 +104,9 @@ export const styles = StyleSheet.create({
 
     subInput: {
         backgroundColor: white,
-        padding: 10,
+        padding: 15,
         borderRadius: 5,
-        width: .56 * screenWidth,
+        width: .45 * screenWidth,
     },
 
     error: {
@@ -133,5 +135,5 @@ export const styles = StyleSheet.create({
 
 });
 
-export {primary, secondary, tertiaryYellow, tertiaryGreen, white, tertairyRed}
+export {primary, secondary, tertiaryYellow, tertiaryGreen, white, tertairyRed, lightPrimary, dark, primaryRed, highlightOrange, specialSalmon, brightYellow, brightRed}
 export {screenWidth, screenHeight}
