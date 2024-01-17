@@ -2,6 +2,7 @@ import React, {ReactNode} from "react";
 import { SafeAreaView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { styles } from "./Styles";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface BasePageProps {
     children: ReactNode;
@@ -9,9 +10,15 @@ interface BasePageProps {
 
 export default function BasePage({ children }: BasePageProps) {
     return (
-        <SafeAreaView style={styles.container}>
-        <StatusBar style="light" />
-            {children}
-        </SafeAreaView>
+        <LinearGradient
+        // Background Linear Gradient
+        colors={['rgba(55, 49, 65, 1)', 'rgba(55, 30, 65, .5)']}
+        style={{flex: 1}}
+        >
+            <SafeAreaView style={styles.container}>
+            <StatusBar style="light" />
+                {children}
+            </SafeAreaView>
+        </LinearGradient>
     );
 }

@@ -17,7 +17,15 @@ export type User = {
     username: string,
     uid: string,
     entries: Entry[],
-    openaikey: string | null
+    openaikey: string | null,
+    calorieInformation: {
+        calorieCount?: number,
+        age?: number,
+        height?: number,
+        weight?: number,
+        gender?: 'male' | 'female',
+        goal?: 'cut' | 'bulk' | 'maintain',
+    } | null
 } | null;
 
 export type dbReturnType = {

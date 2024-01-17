@@ -2,9 +2,10 @@ import { StyleSheet } from "react-native";
 
 const primary = "#362F44";
 const secondary = "#FFA87D";
-const tertiaryYellow = "#FFFCC7";
+const tertiaryYellow = "#FFFFFF";
 const tertiaryGreen = "#B5E47C";
 const tertairyRed = "#D34040";
+const lightPrimary = "#5e5869";
 
 const white = "#FFFFFF";
 
@@ -14,10 +15,8 @@ const screenHeight = 844;
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: primary,
         alignItems: "center",
         justifyContent: "center",
-        paddingTop: 50,
     },
 
     leftContainer: {
@@ -34,7 +33,7 @@ export const styles = StyleSheet.create({
     rightContainer: {
         flexDirection: "row",
         width: .9 * screenWidth,
-        justifyContent: "flex-end",
+        justifyContent: "center",
         margin: 15,
         gap: 15,
     },
@@ -52,6 +51,11 @@ export const styles = StyleSheet.create({
         fontWeight: "bold",
     },
 
+    h3: {
+        fontSize: 13,
+        color: white,
+      
+    },
     button: {
         backgroundColor: secondary,
         width: .7 * screenWidth,
@@ -101,6 +105,21 @@ export const styles = StyleSheet.create({
         width: 250,
         height: 250,
     },
+
+    grayColor: {
+        color: 'lightgray',
+    },
+
+    modal: {
+        width: .8 * screenWidth,
+        height: .8 * screenHeight,
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: lightPrimary,
+        marginTop: 50,
+        borderRadius: 20,
+    }
 
 });
 

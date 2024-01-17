@@ -34,6 +34,7 @@ export default function Navigation() {
       username: userData.data.username,
       entries: userData.data.entries ? userData.data.entries : [],
       openaikey: userData.data.openaikey ? userData.data.openaikey : null,
+      calorieInformation: userData.data.calorieInformation ? userData.data.calorieInformation : null
     });
 
   }
@@ -58,7 +59,7 @@ export default function Navigation() {
     <>
       {user ? (
           <NavigationContainer>
-            <HomeTab.Navigator screenOptions={{tabBarStyle: {backgroundColor: primary}, tabBarActiveTintColor: tertiaryGreen, tabBarInactiveTintColor: white}}>
+            <HomeTab.Navigator screenOptions={{headerTransparent: true, tabBarActiveTintColor: tertiaryGreen, tabBarInactiveTintColor: white}}>
               <HomeTab.Screen name='Measure' options={{headerShown: false, tabBarLabel: "Measure", tabBarIcon: ({color, size}) => (
                   <Octicons name="graph" size={size} color={color} />)}}
               >
@@ -66,10 +67,14 @@ export default function Navigation() {
               </HomeTab.Screen>
               <HomeTab.Screen name = "Track" options={{headerShown: false, tabBarLabel: "Track", tabBarIcon: ({color, size}) => (
                 <MaterialCommunityIcons name="tape-measure" size={size} color={color} />
-              )}} component={Track} />  
+              )}}>
+                {() => <Track user={user} memoizedSetUser={memoizedSetUser} />}
+              </HomeTab.Screen>  
               <HomeTab.Screen name="Meal" options = {{headerShown: false, tabBarLabel: "Meal Prep", tabBarIcon: ({color, size}) => (
                 <Ionicons name="fast-food" size={size} color={color} />
-              )}} component={Meal} />
+              )}}>
+                {() => <Meal user={user} memoizedSetUser={memoizedSetUser} />}
+              </HomeTab.Screen>
               <HomeTab.Screen name="Profile" options = {{headerShown: false, tabBarLabel: "Profile", tabBarIcon: ({color, size}) => (
                 <MaterialIcons name="person" size={size} color={color} />
               )}}>
@@ -80,7 +85,7 @@ export default function Navigation() {
       ) : (
         <NavigationContainer>
           <AuthStack.Navigator>
-              <AuthStack.Screen name='Landing' options={{headerTitle: "", headerStyle: {backgroundColor: primary}}} component={Landing} />
+              <AuthStack.Screen name='Landing' options={{headerTitle: "", headerTransparent: true}} component={Landing} />
               <AuthStack.Screen name='Login'  options={{headerTitle: "", headerStyle: {backgroundColor: primary}}} component={Login} />
               <AuthStack.Screen name='Register'  options={{headerTitle: "", headerStyle: {backgroundColor: primary}}} component={Register} />
           </AuthStack.Navigator>
