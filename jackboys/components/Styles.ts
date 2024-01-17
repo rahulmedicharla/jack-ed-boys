@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 
 const primary = "#362F44";
-const secondary = "#FFA87D";
 const tertiaryYellow = "#FFFFFF";
 const tertiaryGreen = "#B5E47C";
 const tertairyRed = "#D34040";
@@ -9,6 +8,7 @@ const lightPrimary = "#5e5869";
 
 const white = "#FFFFFF";
 
+const secondary = "#FFA87D";
 const dark = "#6D6875"
 const primaryRed = "#B5838D"
 const highlightOrange = "#D69AA6" 
@@ -87,17 +87,16 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
     },
 
-    
     subButtonText: {
         color: white,
         fontSize: 15,
     },
 
     input: {
-        backgroundColor: tertiaryYellow,
+        backgroundColor: white,
         padding: 20,
         margin: 20,
-        borderRadius: 5,
+        borderRadius: 10,
         width: .8 * screenWidth,
     },
 

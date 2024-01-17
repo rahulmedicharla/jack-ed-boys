@@ -59,7 +59,7 @@ export default function Navigation() {
     <>
       {user ? (
           <NavigationContainer>
-            <HomeTab.Navigator screenOptions={{headerTransparent: true, tabBarActiveTintColor: tertiaryGreen, tabBarInactiveTintColor: white}}>
+            <HomeTab.Navigator screenOptions={{headerTransparent: true, tabBarActiveTintColor: tertiaryGreen, tabBarInactiveTintColor: white,}}>
               <HomeTab.Screen name='Measure' options={{headerShown: false, tabBarLabel: "Measure", tabBarIcon: ({color, size}) => (
                   <Octicons name="graph" size={size} color={color} />)}}
               >

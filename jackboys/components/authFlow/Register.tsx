@@ -33,41 +33,43 @@ export default function Register(){
     return (
         <BasePage>
             <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }} 
-                scrollEnabled={false}>
+                scrollEnabled={false}
+                contentContainerStyle={{flex: 1}}>
 
                 <View style={styles.container}>
-                    <Text style={styles.h1}>Please Register</Text>
+                    <Text style={styles.h1}>Register Account</Text>
+                    <Text style={styles.h3}>Enter your information below to create account</Text>
                     <Text style={styles.error}>{error}</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Email"
+                        placeholder="username"
+                        value={username}
+                        onChangeText={(text) => setUsername(text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="email"
                         keyboardType="email-address"
                         value={email}
                         onChangeText={(text) => setEmail(text)}
                     />
                     <TextInput
                         style={styles.input}
-                        placeholder="Username"
-                        value={username}
-                        onChangeText={(text) => setUsername(text)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
+                        placeholder="password"
                         secureTextEntry
                         value={password}
                         onChangeText={(text) => setPassword(text)}
                     />
                     <TextInput
                         style={styles.input}
-                        placeholder="Confirm Password"
+                        placeholder="confirm Password"
                         secureTextEntry
                         value={confirmPassword}
                         onChangeText={(text) => setConfirmPassword(text)}
                     />
 
                     <TouchableOpacity onPress={handleRegister} style={styles.button}>
-                        <Text style={styles.buttonText}>Register</Text>
+                        <Text style={styles.h3}>Register</Text>
                     </TouchableOpacity>
 
                 </View>

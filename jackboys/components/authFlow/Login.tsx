@@ -30,28 +30,31 @@ export default function Login() {
             <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }} 
                 contentContainerStyle={styles.container}
                 scrollEnabled={false}>
-                    <View style={styles.container}>
-                    <Text style={styles.h1}>Please enter email & password</Text>
-                    <Text style={styles.error}>{error}</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        keyboardType="email-address"
-                        value={email}
-                        onChangeText={(text) => setEmail(text)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        secureTextEntry
-                        value={password}
-                        onChangeText={(text) => setPassword(text)}
-                    />
-
-                    <TouchableOpacity onPress={handleLogin} style={styles.button}>
-                        <Text style={styles.buttonText}>Login</Text>
-                    </TouchableOpacity>
-
+                    <View style={styles.gappedContainer}>
+                        <View style={styles.container}>
+                            <Text style={styles.h1}>Login</Text>
+                            <Text style={styles.h3}>Login with your information below</Text>
+                            <Text style={styles.error}>{error}</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="email"
+                                keyboardType="email-address"
+                                value={email}
+                                onChangeText={(text) => setEmail(text)}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="password"
+                                secureTextEntry
+                                value={password}
+                                onChangeText={(text) => setPassword(text)}
+                            />
+                        </View>
+                        <View style={styles.container}>    
+                            <TouchableOpacity onPress={handleLogin} style={styles.button}>
+                                <Text style={styles.h3}>Login</Text>
+                            </TouchableOpacity>
+                        </View>
                 </View>
             </KeyboardAwareScrollView>
         </BasePage>
