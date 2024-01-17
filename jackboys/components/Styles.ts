@@ -87,11 +87,7 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
     },
 
-    buttonText: {
-        color: white,
-        fontSize: 20,
-    },
-
+    
     subButtonText: {
         color: white,
         fontSize: 15,

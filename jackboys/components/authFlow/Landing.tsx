@@ -23,10 +23,10 @@ export default function Landing({navigation}: LandingProps){
                 </View>
                 <View style={styles.container}>
                     <TouchableOpacity onPress={() => route(navigation, "Login")} style={styles.button}>
-                    <Text style={styles.buttonText}>Login</Text>
+                    <Text style={styles.h3}>Login</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => route(navigation, "Register")} style={styles.button}>
-                    <Text style={styles.buttonText}>Register</Text>
+                    <Text style={styles.h3}>Register</Text>
                 </TouchableOpacity>
                 </View>
             </View>
