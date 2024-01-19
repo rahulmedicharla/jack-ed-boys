@@ -7,7 +7,7 @@ import { DisplayEntry, User, addEntry, dbReturnType } from "../../backend/db_hel
 import { Entry } from "../../backend/db_helper";
 import moment from "moment";
 import { MaterialIcons } from '@expo/vector-icons';
-import { LineChart } from "react-native-chart-kit";
+import { LineChart } from "react-native-gifted-charts";
 
 type MeasureProps = {
     user: User,
@@ -32,7 +32,7 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
             if (moment(entry.date).isAfter(lastWeek)){
                 displayItems.push({
                     value: parseFloat(entry.weight),
-                    label: moment(entry.date).format("MM/DD"),
+                    label: moment(entry.date).format("M/DD"),
                     customDataPoint: customDataPoint
                 })
             }
@@ -89,10 +89,10 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
     const customDataPoint = () => {
         return (
             <View style={{
-                width: 20,
-                height: 20,
+                width: 15,
+                height: 15,
                 borderRadius: 10,
-                borderWidth: 4,
+                borderWidth: 2,
                 backgroundColor: white,
                 borderColor: brightRed
             }}>
@@ -112,57 +112,30 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
 
                     {displayEntries ? (
                         <LineChart
-                        data={{
-                            labels: Object.values(displayEntries).map((entry) => entry.label),
-                            datasets: [
-                            {
-                              data: Object.values(displayEntries).map((entry) => entry.value),
-                            }
-                          ]
-                        }}
-                        width={.9 * screenWidth} // from react-native
-                        height={.3 * screenHeight}
-                        yAxisInterval={4} // optional, defaults to 1
-                        withHorizontalLines={false}
-                        chartConfig={{
-                          decimalPlaces: 1, // optional, defaults to 2dp
-                          backgroundGradientFrom: "white",
-                          backgroundGradientFromOpacity: .2,
-                          backgroundGradientToOpacity: .2,
-                          backgroundGradientTo: "white",
+                            areaChart
+                            data={displayEntries}
+                            width={.7 * screenWidth}
+                            startFillColor1="rgb(256,109,111)"
+                            startOpacity1={.4}
+                            endFillColor1="rgb(255,109,111)"
+                            endOpacity1={.1}
+                            curved
+                            hideRules
+                            showFractionalValues
+                            
+                            color1={brightRed}
+                            xAxisColor={"transparent"}
+                            yAxisColor={"transparent"}
+                            xAxisLabelTextStyle={{color: "lightgray"}}
+                            yAxisTextStyle={{color: "lightgray"}}
+                            isAnimated
+                            
+                            yAxisOffset={getAverageWeight() - 7}
+                            maxValue={9}
+                            noOfSections={5}
+                        >
 
-
-                          fillShadowGradientFrom: "rgb(255,109,111)",
-                          fillShadowGradientFromOpacity: 1,
-                          fillShadowGradientTo: "rgb(255,109,111)",
-                          fillShadowGradientToOpacity: 0,
-
-                          
-                          color: (opacity = 1) => "white",
-                          labelColor: (opacity = 1) => `lightgray`,
-                          style: {
-                            borderRadius: 16,
-                          },
-                          propsForDots: {
-                            r: "8",
-                            strokeWidth: "2",
-                            stroke: brightRed
-                          }
-                        }}
-                        bezier
-                        style={{
-                          marginVertical: 8,
-                          borderRadius: 16,
-                          shadowColor: "black",
-                            shadowOffset: {
-                                width: -10,
-                                height: 10,
-                            },
-                            shadowOpacity: .5,
-                            shadowRadius: 5,
-
-                        }}
-                      />
+                        </LineChart>
 
                     ):(
                         <Text style={styles.h3}>Add your first entry to get started!</Text>
@@ -171,7 +144,7 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
                     {newEntry.status ? (
                         <View style={styles.horizontalContainer2}>
                             <TouchableOpacity style={{justifyContent: 'center'}} onPress={() => cancelAddEntry()}>
-                                <MaterialIcons name="cancel" size={30} color={secondary} />
+                                <MaterialIcons name="cancel" size={30} color={highlightOrange} />
                             </TouchableOpacity>
                             <TextInput style={styles.subInput} keyboardType="decimal-pad" onChangeText={(text) => {setNewEntry(
                                 {
@@ -194,8 +167,8 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
 
                     {displayEntries && displayEntries.map((entry: DisplayEntry, index) => (
                         <View key={index} style={styles.leftContainer}>
-                            <Text style={styles.h2}>{displayEntries[displayEntries.length - 1 - index].value}</Text>
-                            <Text style={styles.h2}>{displayEntries[displayEntries.length - 1 - index].label} lbs</Text>
+                            <Text style={styles.whiteH2}>{displayEntries[displayEntries.length - 1 - index].value} lbs</Text>
+                            <Text style={styles.whiteH2}>{displayEntries[displayEntries.length - 1 - index].label}</Text>
                         </View>
                     ))}
                     

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
 
 const primary = "#362F44";
 const tertiaryYellow = "#FFFFFF";
@@ -27,10 +28,11 @@ export const styles = StyleSheet.create({
     },
 
     gappedContainer: {
+        marginTop: 20,
         flex: 1,
         alignItems: "center",
         justifyContent: "space-between",
-        gap: 30,
+        gap: 15,
     },
 
     leftContainer: {
@@ -39,7 +41,7 @@ export const styles = StyleSheet.create({
         justifyContent: "flex-start",
         margin: 15,
         gap: 15,
-        backgroundColor: tertiaryGreen,
+        backgroundColor: primaryRed,
         padding: 12,
         borderRadius: 10,
     },
@@ -70,6 +72,12 @@ export const styles = StyleSheet.create({
         fontWeight: "bold",
     },
 
+    whiteH2: {
+        fontSize: 25,
+        color: white,
+        fontWeight: "bold",
+    },
+
     h3: {
         fontSize: 15,
         color: white,
@@ -77,7 +85,6 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         lineHeight: 20,
     },
-
 
     button: {
         backgroundColor: highlightOrange,
@@ -89,10 +96,11 @@ export const styles = StyleSheet.create({
     },
 
     subButton: {
-        backgroundColor: secondary,
-        paddingHorizontal: 15,
-        paddingVertical: 10,
+        backgroundColor: highlightOrange,
         borderRadius: 10,
+        alignItems: "center",
+        padding: 15,
+        justifyContent: "center",
     },
 
     subButtonText: {
