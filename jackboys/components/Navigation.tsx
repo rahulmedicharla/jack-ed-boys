@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Landing from "./authFlow/Landing";
 import Login from "./authFlow/Login";
 import Register from "./authFlow/Register";
-import { primary, secondary, tertiaryGreen, white } from "./Styles";
+import { lightPrimary, primary, secondary, tertiaryGreen, white } from "./Styles";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Measure from "./mainFlow/Measure";
 import { Octicons } from '@expo/vector-icons';
@@ -40,7 +40,6 @@ export default function Navigation() {
   }
 
   const memoizedSetUser = useCallback((user: User) => {
-    console.log('running')
     setUser(user);
   }, []);
 
@@ -59,7 +58,7 @@ export default function Navigation() {
     <>
       {user ? (
           <NavigationContainer>
-            <HomeTab.Navigator screenOptions={{headerTransparent: true, tabBarActiveTintColor: tertiaryGreen, tabBarInactiveTintColor: white,}}>
+            <HomeTab.Navigator screenOptions={{tabBarStyle: {backgroundColor: lightPrimary} ,tabBarActiveTintColor: tertiaryGreen, tabBarInactiveTintColor: white,}}>
               <HomeTab.Screen name='Measure' options={{headerShown: false, tabBarLabel: "Measure", tabBarIcon: ({color, size}) => (
                   <Octicons name="graph" size={size} color={color} />)}}
               >

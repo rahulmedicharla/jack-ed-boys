@@ -14,7 +14,7 @@ const primaryRed = "#B5838D"
 const highlightOrange = "#D69AA6" 
 const specialSalmon = "#FFB4A2"
 const brightYellow = "#FFCDB2"
-const brightRed = "FF6D6F"
+const brightRed = "#FF6D6F"
 
 const screenWidth = 390; 
 const screenHeight = 844;
@@ -30,6 +30,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "space-between",
+        gap: 30,
     },
 
     leftContainer: {
@@ -51,6 +52,11 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
 
+    horizontalContainer2: {
+        flexDirection: "row",
+        gap: 10,
+    },
+
     h1: {
         fontSize: 41,
         fontWeight: "bold",
@@ -59,8 +65,8 @@ export const styles = StyleSheet.create({
     },
 
     h2: {
-        fontSize: 20,
-        color: white,
+        fontSize: 25,
+        color: highlightOrange,
         fontWeight: "bold",
     },
 

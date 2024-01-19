@@ -10,8 +10,9 @@ export type Entry = {
 }
 
 export type DisplayEntry = {
-    date: string[],
-    weight: number[]
+    value: number,
+    label: string,
+    customDataPoint?: () => JSX.Element
 } | null
 
 export type User = {
