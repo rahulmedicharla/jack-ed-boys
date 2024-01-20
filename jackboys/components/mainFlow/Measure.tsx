@@ -32,7 +32,7 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
             if (moment(entry.date).isAfter(lastWeek)){
                 displayItems.push({
                     value: parseFloat(entry.weight),
-                    label: moment(entry.date).format("M/DD"),
+                    label: moment().format("M/DD") != moment(entry.date).format("M/DD") ? moment(entry.date).format("M/DD") : "Today",
                     customDataPoint: customDataPoint
                 })
             }
@@ -116,7 +116,7 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
                             data={displayEntries}
                             width={.7 * screenWidth}
                             startFillColor1="rgb(256,109,111)"
-                            startOpacity1={.4}
+                            startOpacity1={.6}
                             endFillColor1="rgb(255,109,111)"
                             endOpacity1={.1}
                             curved
@@ -133,9 +133,7 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
                             yAxisOffset={getAverageWeight() - 7}
                             maxValue={9}
                             noOfSections={5}
-                        >
-
-                        </LineChart>
+                        />
 
                     ):(
                         <Text style={styles.h3}>Add your first entry to get started!</Text>
