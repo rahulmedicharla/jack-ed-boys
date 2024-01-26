@@ -29,26 +29,25 @@ export default function Navigation() {
 
   const collectUserData = async (uid: string) => {
     const userData = await readUserDoc(uid);
+
     setUser({
       uid: uid,
       username: userData.data.username,
       entries: userData.data.entries ? userData.data.entries : [],
       openaikey: userData.data.openaikey ? userData.data.openaikey : null,
-      calorieInformation: userData.data.calorieInformation ? userData.data.calorieInformation : null
+      calorieInformation: userData.data.calorieInformation ? userData.data.calorieInformation : null, 
+      nutritionInformation: userData.data.nutritionInformation ? userData.data.nutritionInformation : null,
     });
-
   }
 
-  const memoizedSetUser = useCallback((user: User) => {
-    setUser(user);
+  const memoizedSetUser = useCallback((newUser: User) => { 
+    setUser(newUser);
   }, []);
 
   useEffect(() => {
     onAuthStateChanged(auth, (userInfo) =>{
       if (userInfo) {
-
         collectUserData(userInfo.uid);
-      
       } else {
         setUser(null);
       }

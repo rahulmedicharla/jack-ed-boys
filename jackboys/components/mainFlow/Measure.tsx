@@ -70,10 +70,7 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
     }
 
     const handleAddEntrySubmit = () => {
-        const today = moment().format("MM/DD");
-        
-
-        if(displayEntries && displayEntries.some((entry) => entry.label === today)){
+        if(displayEntries && displayEntries.some((entry) => entry.label === "Today")){
             alert("You have already made an entry for today")
             return;
         }
@@ -122,7 +119,6 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
                             curved
                             hideRules
                             showFractionalValues
-                            
                             color1={brightRed}
                             xAxisColor={"transparent"}
                             yAxisColor={"transparent"}

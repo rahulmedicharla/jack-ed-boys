@@ -1,5 +1,5 @@
-import { UserCredential, createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import {getFirestore, doc, setDoc, getDoc} from "firebase/firestore";
+import { UserCredential, createUserWithEmailAndPassword, getAuth, updateProfile } from "firebase/auth";
+import {getFirestore, doc, setDoc, getDoc, updateDoc} from "firebase/firestore";
 import moment from "moment";
 import { registerUser } from "./auth_helper";
 
@@ -28,6 +28,18 @@ export type User = {
         gender?: 'male' | 'female',
         goal?: 'cut' | 'bulk' | 'maintain',
         activityLevel?: 'none' | 'light' | 'moderate' | 'heavy',
+    } | null,
+    nutritionInformation: {
+        date: string,
+        foodEntries: {
+            title: string,
+            calories: number,
+            protien: number,
+            carbs: number,
+            fat: number,
+            type: 'breakfast' | 'lunch' | 'dinner' | 'snacks',
+            uniqId: string,
+        }[] | null,
     } | null
 } | null;
 
@@ -35,6 +47,103 @@ export type dbReturnType = {
     status: 'success' | 'error',
     error?: string,
     data?: any
+}
+
+export type foodItem = {
+    label: string,
+    uniqId: string
+    measures: {
+        uri: string,
+        label: string,
+        weight: number
+    }[]
+}
+
+export const getNutritionInformation = async (newEntry: {
+    label: string,
+    measureUri: string,
+    quantity?: number,
+    uniqId: string,
+}) => {
+    const appId = process.env.EXPO_PUBLIC_APP_ID
+    const appKey = process.env.EXPO_PUBLIC_APP_KEY  
+
+    try{
+        const response = await fetch("https://api.edamam.com/api/food-database/v2/nutrients?app_id=" + appId + "&app_key=" + appKey, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            ingredients: [
+                {
+                    quantity: parseInt(newEntry.quantity + ""),
+                    measureURI: newEntry.measureUri,
+                    foodId: newEntry.uniqId
+                }]
+            })
+        })
+
+        const data = await response.json()
+
+        const returnVal: dbReturnType = {
+            status: 'success',
+            data: {
+                title: newEntry.label,
+                calories: data.calories,
+                protien: parseInt(data.totalNutrients.PROCNT.quantity + ""),
+                carbs: parseInt(data.totalNutrients.CHOCDF.quantity + ""),
+                fat: parseInt(data.totalNutrients.FAT.quantity + ""),
+                uniqId: newEntry.uniqId + moment().toISOString()
+            }
+        }
+
+        return returnVal
+        
+    }catch(e){
+        const returnVal: dbReturnType = {
+            status: 'error',
+            error: e.message
+        }
+
+        return returnVal
+    }
+
+}
+
+export const getFoodList = async (searchQuery: string) => {
+    const appId = process.env.EXPO_PUBLIC_APP_ID
+    const appKey = process.env.EXPO_PUBLIC_APP_KEY
+
+    const encodedQuery = encodeURIComponent(searchQuery)
+
+    try{
+        const response = await fetch("https://api.edamam.com/api/food-database/v2/parser?app_id=" + appId + "&app_key=" + appKey+ "&ingr=" + encodedQuery+ "&nutrition-type=logging")
+        const data = await response.json()
+
+        const foodList: foodItem[] = data.hints.map((item: any) => {
+            return {
+                label: item.food.label,
+                uniqId: item.food.foodId,
+                measures: item.measures
+            }
+        })
+
+        const returnVal:dbReturnType = {
+            status: 'success',
+            data: foodList.slice(0, 5)
+        }
+
+        return returnVal
+
+    }catch(error){
+        const returnVal: dbReturnType = {
+            status: 'error',
+            error: error.message
+        }
+
+        return returnVal
+    }
 }
 
 const calculateCalorieCount = (registerUser: registerUser) => {
@@ -66,6 +175,58 @@ const calculateCalorieCount = (registerUser: registerUser) => {
     return BMR
 }
 
+export const addFoodEntry = async(user: User, type: 'breakfast' | 'lunch' | 'dinner' | 'snacks', newEntry: {
+    title: string,
+    calories: number,
+    protien: number,
+    carbs: number,
+    fat: number,
+    uniqId: string,
+}) => {
+    const db = getFirestore()
+
+    const todayDate = moment().toISOString()
+
+    let updatedUser: User = user
+
+    try{
+        if(updatedUser.nutritionInformation){
+            updatedUser.nutritionInformation.foodEntries.push({
+                ...newEntry,
+                type: type
+            })
+            updatedUser.nutritionInformation.date = todayDate
+        }else{
+            updatedUser.nutritionInformation = {
+                date: todayDate,
+                foodEntries:[{
+                    ...newEntry,
+                    type: type
+                }]
+            }
+        }
+        
+        await setDoc(doc(db, "Users", user.uid), updatedUser)
+
+        const returnVal: dbReturnType = {
+            status: 'success',
+            data:updatedUser.nutritionInformation
+        }
+
+        return returnVal;
+        
+
+    }catch(e){
+        const returnVal: dbReturnType = {
+            status:'error',
+            error: e.message,
+
+        }
+
+        return returnVal
+    }
+
+}
 export const createNewUserDocument = async (user: UserCredential, registerUser: registerUser) => {
     const db = getFirestore();
 
@@ -75,6 +236,10 @@ export const createNewUserDocument = async (user: UserCredential, registerUser: 
         username: registerUser.username,
         uid: user.user.uid,
         calorieInformation: {
+            todaysCalorieCount: {
+                value: 0,
+                date: new Date().toISOString()
+            },
             calorieCount: calorieCount,
             age: registerUser.age,
             height: registerUser.height,
@@ -86,6 +251,32 @@ export const createNewUserDocument = async (user: UserCredential, registerUser: 
     })
 };
 
+const wipePastFoodRecord = async (data, uid) => {
+    const db = getFirestore()
+    delete data.nutritionInformation
+    
+    const docRef = doc(db, "Users", uid);
+    await setDoc(docRef, data)
+
+    return data
+} 
+
+const validateDate = async (data, uid) => {
+    if(!data.nutritionInformation){
+        return data
+    }
+
+    const today = moment()
+    const notedDate = moment(data.nutritionInformation.date)
+
+    if (today.isSame(notedDate, 'D')){
+        return data;
+    }
+
+    const updatedData = await wipePastFoodRecord(data, uid)
+    return updatedData;
+}
+
 export const readUserDoc = async (uid: string) => {
     const db = getFirestore()
     
@@ -94,9 +285,12 @@ export const readUserDoc = async (uid: string) => {
 
     if (docSnap.exists()) {
         const data = docSnap.data();
+
+        const updatedData = await validateDate(data, uid)
+
         return {
             status: 'success',
-            data: data
+            data: updatedData
         }
     }else{
         return {

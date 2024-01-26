@@ -46,6 +46,16 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
     },
 
+    leftContainerTrans: {
+        flexDirection: "column",
+        width: .9 * screenWidth,
+        justifyContent: "flex-start",
+        margin: 15,
+        gap: 15,
+        padding: 12,
+        borderRadius: 10,
+    },
+
     horizontalContainer: {
         flexDirection: "row",
         width: .9 * screenWidth,
@@ -137,12 +147,13 @@ export const styles = StyleSheet.create({
     },
 
     modal: {
-        width: .8 * screenWidth,
-        height: .8 * screenHeight,
+        width: .9 * screenWidth,
+        height: .83 * screenHeight,
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: lightPrimary,
+        gap: 30,
+        backgroundColor: primary,
         marginTop: 50,
         borderRadius: 20,
     }
