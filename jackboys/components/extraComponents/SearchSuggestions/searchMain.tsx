@@ -96,7 +96,7 @@ export default function SearchMain({newEntry, setNewEntry}) {
                 )
             })}
 
-            {searchValue.uniqId ? (
+            {searchValue.uniqId && newEntry ? (
                 <View style={{gap: 10, margin: 10}}>
                     <View style={{borderTopColor: "lightgray", borderTopWidth: 1}}></View>
                     <Text>Select unit of measure & quantity</Text>

@@ -40,7 +40,21 @@ export type User = {
             type: 'breakfast' | 'lunch' | 'dinner' | 'snacks',
             uniqId: string,
         }[] | null,
-    } | null
+    } | null,
+    meals: {
+            title: string,
+            ingredients: {
+                label: string,
+                uniqid: string,
+                measureUri: string,
+                quantity?: string
+            }[],
+            calories: number,
+            protien: number,
+            carbs: number,
+            fat: number,
+            numberOfServings: number
+    }[] | null
 } | null;
 
 export type dbReturnType = {
@@ -57,6 +71,23 @@ export type foodItem = {
         label: string,
         weight: number
     }[]
+}
+
+export type mealPrepType = {
+    status: boolean
+    title?: string,
+    ingredients?: {
+        label: string,
+        uniqid: string,
+        measureUri: string,
+        quantity?: string
+    }[]
+    calories?: number,
+    protien?: number,
+    carbs?: number,
+    fat?: number,
+    numberOfServings?: number
+    error: string | null
 }
 
 export const getNutritionInformation = async (newEntry: {
@@ -77,7 +108,7 @@ export const getNutritionInformation = async (newEntry: {
         body: JSON.stringify({
             ingredients: [
                 {
-                    quantity: parseInt(newEntry.quantity + ""),
+                    quantity: parseFloat(newEntry.quantity + ""),
                     measureURI: newEntry.measureUri,
                     foodId: newEntry.uniqId
                 }]
@@ -125,7 +156,7 @@ export const getFoodList = async (searchQuery: string) => {
             return {
                 label: item.food.label,
                 uniqId: item.food.foodId,
-                measures: item.measures
+                measures: item.measures.slice(0, 5)
             }
         })
 
@@ -227,6 +258,54 @@ export const addFoodEntry = async(user: User, type: 'breakfast' | 'lunch' | 'din
     }
 
 }
+
+export const addMealEntry = async(user:User, mealEntry: mealPrepType) => {
+    const db = getFirestore()
+
+    try{
+        let updatedUser: User = user
+
+        if(updatedUser.meals){
+            updatedUser.meals.push({
+                title: mealEntry.title,
+                ingredients: mealEntry.ingredients,
+                calories: mealEntry.calories / mealEntry.numberOfServings,
+                protien: mealEntry.protien / mealEntry.numberOfServings,
+                carbs: mealEntry.carbs / mealEntry.numberOfServings,
+                fat: mealEntry.fat / mealEntry.numberOfServings,
+                numberOfServings: mealEntry.numberOfServings
+            })
+        }else{
+            updatedUser.meals = [{
+                title: mealEntry.title,
+                ingredients: mealEntry.ingredients,
+                calories: mealEntry.calories / mealEntry.numberOfServings,
+                protien: mealEntry.protien / mealEntry.numberOfServings,
+                carbs: mealEntry.carbs / mealEntry.numberOfServings,
+                fat: mealEntry.fat / mealEntry.numberOfServings,
+                numberOfServings: mealEntry.numberOfServings / mealEntry.numberOfServings
+            }]
+        }
+
+        await setDoc(doc(db, "Users", user.uid), updatedUser)
+    
+        const returnVal: dbReturnType = {
+            status: 'success',
+            data: updatedUser.meals
+        }
+
+        return returnVal
+
+    }catch(e){
+        const returnVal: dbReturnType = {
+            status:'error',
+            error: e.message,
+
+        }
+        return returnVal
+    }
+}
+
 export const createNewUserDocument = async (user: UserCredential, registerUser: registerUser) => {
     const db = getFirestore();
 

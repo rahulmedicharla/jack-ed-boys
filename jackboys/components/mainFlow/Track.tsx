@@ -1,11 +1,12 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import BasePage from "../BasePage";
-import { Modal, Text, TextInput, Touchable, TouchableOpacity, View } from "react-native";
+import { Modal, Text, TouchableOpacity, View } from "react-native";
 import { User, addFoodEntry, dbReturnType, getNutritionInformation } from "../../backend/db_helper";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { highlightOrange, styles } from "../Styles";
 import { MaterialIcons } from '@expo/vector-icons';
 import SearchMain from "../extraComponents/SearchSuggestions/searchMain";
+import { Float } from "react-native/Libraries/Types/CodegenTypes";
 
 type TrackProps = {
     user: User
@@ -34,7 +35,7 @@ export default function Track({user, memoizedSetUser}: TrackProps){
         label: string,
         uniqId: string,
         measureUri: string,
-        quantity?: number,
+        quantity?: Float,
     } | null>(null)
 
     const [todayInformation, setTodayInformtion] = useState<{
@@ -159,7 +160,7 @@ export default function Track({user, memoizedSetUser}: TrackProps){
 
                 <View style={styles.gappedContainer}>
                     <Text style={styles.h2}>Your Daily Calorie Count</Text>
-                    <Text style={styles.whiteH2}>{parseInt(user.calorieInformation.calorieCount + "")}</Text>
+                    <Text style={styles.whiteH2}>{parseInt(todayInformation.calorieCount + "")} / {parseInt(user.calorieInformation.calorieCount + "")} Calories</Text>
                     
                     <View style={styles.container}>
                         <Text style={styles.h3}>Track your calories below!</Text>
@@ -274,7 +275,7 @@ export default function Track({user, memoizedSetUser}: TrackProps){
 
                         <View style={styles.modal}>
                             <TouchableOpacity onPress={() => toggleAddEntry(addFood.breakfast ? "breakfast" : addFood.lunch ? "lunch" : addFood.dinner ? "dinner" : "snacks")}>
-                                <MaterialIcons name="cancel" size={30} color={highlightOrange} />
+                                <MaterialIcons name="close" size={30} color={highlightOrange} />
                             </TouchableOpacity>
                             <Text style={styles.h2}>Add an entry for {addFood.breakfast ? "breakfast" : addFood.lunch ? "lunch" : addFood.dinner ? "dinner" : "snacks"}</Text>
 

@@ -111,7 +111,7 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
                         <LineChart
                             areaChart
                             data={displayEntries}
-                            width={.7 * screenWidth}
+                            width={.8 * screenWidth}
                             startFillColor1="rgb(256,109,111)"
                             startOpacity1={.6}
                             endFillColor1="rgb(255,109,111)"

@@ -27,6 +27,13 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
     },
 
+    topContainer: {
+        flex: 1,
+        alignItems: "center",
+        margin: 20,
+        gap:10
+    },
+
     gappedContainer: {
         marginTop: 20,
         flex: 1,
@@ -50,9 +57,8 @@ export const styles = StyleSheet.create({
         flexDirection: "column",
         width: .9 * screenWidth,
         justifyContent: "flex-start",
-        margin: 15,
         gap: 15,
-        padding: 12,
+        padding: 10,
         borderRadius: 10,
     },
 
@@ -121,7 +127,7 @@ export const styles = StyleSheet.create({
     input: {
         backgroundColor: white,
         padding: 20,
-        margin: 20,
+        margin: 10,
         borderRadius: 10,
         width: .8 * screenWidth,
     },
@@ -133,6 +139,12 @@ export const styles = StyleSheet.create({
         width: .45 * screenWidth,
     },
 
+    smallInput: {
+        backgroundColor: white,
+        padding: 20,
+        borderRadius: 5,
+        width: .4 * screenWidth,
+    },
     error: {
         color: secondary,
     },
@@ -152,7 +164,7 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 30,
+        gap: 25,
         backgroundColor: primary,
         marginTop: 50,
         borderRadius: 20,

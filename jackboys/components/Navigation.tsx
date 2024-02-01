@@ -37,6 +37,7 @@ export default function Navigation() {
       openaikey: userData.data.openaikey ? userData.data.openaikey : null,
       calorieInformation: userData.data.calorieInformation ? userData.data.calorieInformation : null, 
       nutritionInformation: userData.data.nutritionInformation ? userData.data.nutritionInformation : null,
+      meals: userData.data.meals ? userData.data.meals : null
     });
   }
 
