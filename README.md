@@ -1,1 +1,1 @@
-This is a personal all in one fitness application with weight, meal, & exercize tracking features.
+This is a personal fitness tracker that allows you to create custom exercise plans and meals while tracking weight and calorie count information. Also leverages generative AI to provide personalized suggestions for exercise plans and meal prepping to meat nutrition goals. 
