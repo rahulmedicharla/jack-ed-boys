@@ -73,6 +73,7 @@ export const styles = StyleSheet.create({
     horizontalContainer2: {
         flexDirection: "row",
         gap: 10,
+        alignItems: "center",
     },
 
     h1: {

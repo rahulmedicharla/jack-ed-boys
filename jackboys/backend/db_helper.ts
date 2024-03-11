@@ -259,6 +259,33 @@ export const addFoodEntry = async(user: User, type: 'breakfast' | 'lunch' | 'din
 
 }
 
+export const removeMealEntry = async(user: User, title: string) => {
+    const db = getFirestore()
+
+    try{
+        let updatedUser: User = user
+
+        updatedUser.meals = updatedUser.meals.filter((item) => item.title != title)
+
+        await setDoc(doc(db, "Users", user.uid), updatedUser)
+    
+        const returnVal: dbReturnType = {
+            status: 'success',
+            data: updatedUser.meals
+        }
+
+        return returnVal
+
+    }catch(e){
+        const returnVal: dbReturnType = {
+            status:'error',
+            error: e.message,
+
+        }
+        return returnVal
+    }
+}
+
 export const addMealEntry = async(user:User, mealEntry: mealPrepType) => {
     const db = getFirestore()
 

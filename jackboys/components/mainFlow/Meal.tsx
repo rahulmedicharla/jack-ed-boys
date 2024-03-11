@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Text,TextInput,TouchableOpacity,Modal,View, ScrollView } from "react-native";
 import BasePage from "../BasePage";
-import { User, addMealEntry, dbReturnType, foodItem, getNutritionInformation, mealPrepType } from "../../backend/db_helper";
+import { User, addMealEntry, dbReturnType, foodItem, getNutritionInformation, mealPrepType, removeMealEntry } from "../../backend/db_helper";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { highlightOrange, secondary, styles } from "../Styles";
+import { brightRed, brightYellow, highlightOrange, primaryRed, secondary, styles, tertairyRed, tertiaryYellow, white } from "../Styles";
 import { MaterialIcons } from '@expo/vector-icons';
 import { submitOpenAIQuestion } from "../../backend/ai_helper";
 import { Double, Float } from "react-native/Libraries/Types/CodegenTypes";
@@ -49,6 +49,23 @@ export default function Meal({user, memoizedSetUser}: MealProps){
         })
     }
 
+    const removeMeal = (title: string) => {
+
+        removeMealEntry(user, title).then((res: dbReturnType) => {
+            if(res.status == 'success'){
+                memoizedSetUser({
+                    ...user,
+                    meals: res.data
+                })
+            }else{
+                setMealPrep({
+                    ...mealPrep,
+                    error: res.error
+                })
+            }
+        })
+    }
+
     const submitMeal = () => {
         if(mealPrep.title == "" || mealPrep.numberOfServings == null || mealPrep.ingredients.length == 0){
             setMealPrep({
@@ -74,6 +91,36 @@ export default function Meal({user, memoizedSetUser}: MealProps){
         })
 
           
+    }
+
+    const removeIngredient = (uniqId: string) => {
+        const removedIngredient = mealPrep.ingredients.filter((ingredient) => ingredient.uniqid == uniqId);
+
+        getNutritionInformation({
+            label: removedIngredient[0].label,
+            uniqId: removedIngredient[0].uniqid,
+            measureUri: removedIngredient[0].measureUri,
+            quantity: parseFloat(removedIngredient[0].quantity)
+        }).then((res: dbReturnType) => {
+            if(res.status == 'success'){
+                setMealPrep({
+                    ...mealPrep,
+                    ingredients: mealPrep.ingredients.filter((ingredient) => ingredient.uniqid != uniqId),
+                    calories: mealPrep.calories - res.data.calories,
+                    protien: mealPrep.protien - res.data.protien,
+                    carbs: mealPrep.carbs - res.data.carbs,
+                    fat: mealPrep.fat - res.data.fat,
+                    error: null,
+                })
+            }else{
+                setMealPrep({
+                    ...mealPrep,
+                    error: res.error
+                })
+            }
+        })
+
+        
     }
 
     const addIngredient = () => {
@@ -127,8 +174,11 @@ export default function Meal({user, memoizedSetUser}: MealProps){
                     return (
                         <View key={index} style={styles.leftContainer}>
                             <View style={styles.horizontalContainer2}>
+                                <TouchableOpacity onPress={() => removeMeal(meal.title)}>
+                                    <MaterialIcons name="close" size={30} color={brightYellow} />
+                                </TouchableOpacity>        
                                 <Text style={styles.whiteH2}>{meal.title}</Text>
-                                <Text style={styles.h3}>{meal.numberOfServings} servings</Text>        
+                                <Text style={styles.h3}>{meal.numberOfServings} servings</Text>
                             </View>
                             <View style={styles.horizontalContainer2}>    
                                 <Text style={styles.h3}>Calories: {meal.calories} cal/s</Text>
@@ -188,6 +238,9 @@ export default function Meal({user, memoizedSetUser}: MealProps){
                                             {mealPrep.ingredients.length > 0 && mealPrep.ingredients.map((ingredient, index) => {
                                                 return (
                                                     <View key={ingredient.uniqid} style={styles.horizontalContainer2}>
+                                                        <TouchableOpacity onPress={() => removeIngredient(ingredient.uniqid)}>
+                                                            <MaterialIcons name="close" size={25} color={highlightOrange} />
+                                                        </TouchableOpacity>
                                                         <Text style={styles.h3}><Text style={{fontWeight: 'bold'}}>{ingredient.quantity}</Text></Text>
                                                         <Text style={styles.h3}><Text style={{fontWeight: "bold"}}>{ingredient.label}(s)</Text></Text>
                                                     </View>
