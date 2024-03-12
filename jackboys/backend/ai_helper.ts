@@ -1,4 +1,4 @@
-const roleText = "You are an assistant designed to provide the most healthy food ideas and recipes given a list of ingredients. Provide three ideas."
+const roleText = "You are an assistant designed to provide the most healthy food ideas and recipes given a list of ingredients. Provide three ideas. Don't ask any questions in return make assumptions as you need."
 
 export type aiReturnType = {
     status: 'success' | 'error',
@@ -6,7 +6,9 @@ export type aiReturnType = {
     data?: string
 }
 
-export const submitOpenAIQuestion = async(question: string, openaikey: string) => {
+export const submitOpenAIQuestion = async(question: string) => {
+
+    const openaikey = process.env.EXPO_PUBLIC_AI_KEY
 
     const messages = [
         {
@@ -29,20 +31,27 @@ export const submitOpenAIQuestion = async(question: string, openaikey: string) =
 
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
             headers: {
-                ContentType: "application/json",
-                Authorization: `Bearer ${openaikey}`
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${openaikey}`
             },
             method: "POST",
-            body:JSON.stringify({
+            body: JSON.stringify({
                 model: "gpt-3.5-turbo",
-                messages: messages,
-            }),
-            
-        })
+                messages: [
+                    {
+                        role: "system",
+                        content: roleText
+                    },
+                    {
+                        role: "user",
+                        content: question
+                    }
+                ]
+            })
+        });
 
-        const chatCompletion = await response.json()
-        console.log(chatCompletion)
-        console.log(chatCompletion['choices'][0]['message']['content'])
+        const chatCompletion = await response.json();
+        console.log(chatCompletion);
     
         return {
             status: 'success',

@@ -103,6 +103,13 @@ export const styles = StyleSheet.create({
         lineHeight: 20,
     },
 
+    buttonH3:{
+        borderRadius: 10,
+        borderColor: white,
+        borderWidth: 1,
+        padding: 10,
+    },
+
     button: {
         backgroundColor: highlightOrange,
         width: .7 * screenWidth,

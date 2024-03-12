@@ -87,7 +87,9 @@ export type mealPrepType = {
     carbs?: number,
     fat?: number,
     numberOfServings?: number
-    error: string | null
+    error: string | null,
+    question: string | null,
+    answer: string | null
 }
 
 export const getNutritionInformation = async (newEntry: {

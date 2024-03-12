@@ -114,9 +114,6 @@ export default function Track({user, memoizedSetUser}: TrackProps){
         }
     }, [user])
 
-    useEffect(() => {
-    }, [todayInformation])
-
     const toggleAddEntry = (field: string) => {
         setAddFood({
             ...addFood,
@@ -126,6 +123,38 @@ export default function Track({user, memoizedSetUser}: TrackProps){
 
     const submitEntry = () => {
         if(newEntry){
+            if(newEntry.uniqId == "meal"){
+                const newMeal = user.meals.find((meal) => meal.title == newEntry.label)
+
+                addFoodEntry(user, addFood.breakfast ? 'breakfast' : addFood.lunch ? 'lunch' : addFood.dinner ? 'dinner' : 'snacks', {
+                    title: newMeal.title,
+                    calories: newMeal.calories,
+                    protien: newMeal.protien,
+                    carbs: newMeal.carbs,
+                    fat: newMeal.fat,
+                    uniqId: newMeal.title
+                }).then((response: dbReturnType) => {
+                    if(response.status == "success"){
+
+                        memoizedSetUser({
+                            ...user,
+                            nutritionInformation: response.data
+                        })
+                        
+                        setAddFood({
+                            breakfast: false,
+                            lunch: false,
+                            dinner: false,
+                            snacks: false
+                        })
+
+                    }else{
+                        alert(response.error)
+                    }
+                })
+                return;
+            }
+
             getNutritionInformation(newEntry).then((res: dbReturnType) => {
                 addFoodEntry(user, addFood.breakfast ? 'breakfast' : addFood.lunch ? 'lunch' : addFood.dinner ? 'dinner' : 'snacks', res.data).then((response: dbReturnType) => {
                     if(response.status == "success"){
@@ -170,7 +199,7 @@ export default function Track({user, memoizedSetUser}: TrackProps){
                     <View style={styles.leftContainerTrans}>
                         <View style={styles.horizontalContainer2}>
                             <Text style={styles.h2}>Breakfast</Text>
-                            <Text style={styles.h3}>{todayInformation.breakfast.reduce((accumulator, currentValue) => accumulator + currentValue.calories, 0)} Calories</Text>
+                            <Text style={styles.h3}>{todayInformation.breakfast.reduce((accumulator, currentValue) => accumulator + currentValue.calories, 0).toFixed(2)} Calories</Text>
                         </View>
                         {todayInformation.breakfast.length > 0 && todayInformation.breakfast.map((entry) => {
                             return (
@@ -179,10 +208,10 @@ export default function Track({user, memoizedSetUser}: TrackProps){
                                         <Text style={styles.h3}><Text style={{fontWeight: "bold"}}>{entry.title}</Text></Text>
                                     </View>
                                     <View style={styles.horizontalContainer2}>
-                                        <Text style={styles.h3}>{entry.calories} Calories</Text>
-                                        <Text style={styles.h3}>{entry.protien}g Protien</Text>
-                                        <Text style={styles.h3}>{entry.carbs}g Carbs</Text>
-                                        <Text style={styles.h3}>{entry.fat}g Fat</Text>
+                                        <Text style={styles.h3}>{entry.calories.toFixed(0)} Cal</Text>
+                                        <Text style={styles.h3}>{entry.protien.toFixed(0)}g Pt</Text>
+                                        <Text style={styles.h3}>{entry.carbs.toFixed(0)}g C</Text>
+                                        <Text style={styles.h3}>{entry.fat.toFixed(0)}g F</Text>
                                     </View>
                                 </View>
                             )
@@ -195,7 +224,7 @@ export default function Track({user, memoizedSetUser}: TrackProps){
                     <View style={styles.leftContainerTrans}>
                         <View style={styles.horizontalContainer2}>
                             <Text style={styles.h2}>Lunch</Text>
-                            <Text style={styles.h3}>{todayInformation.lunch.reduce((accumulator, currentValue) => accumulator + currentValue.calories, 0)} Calories</Text>
+                            <Text style={styles.h3}>{todayInformation.lunch.reduce((accumulator, currentValue) => accumulator + currentValue.calories, 0).toFixed(2)} Calories</Text>
                         </View>
                         {todayInformation.lunch.length > 0 && todayInformation.lunch.map((entry) => {
                             return (
@@ -204,10 +233,10 @@ export default function Track({user, memoizedSetUser}: TrackProps){
                                         <Text style={styles.h3}><Text style={{fontWeight: "bold"}}>{entry.title}</Text></Text>
                                     </View>
                                     <View style={styles.horizontalContainer2}>
-                                        <Text style={styles.h3}>{entry.calories} Calories</Text>
-                                        <Text style={styles.h3}>{entry.protien}g Protien</Text>
-                                        <Text style={styles.h3}>{entry.carbs}g Carbs</Text>
-                                        <Text style={styles.h3}>{entry.fat}g Fat</Text>
+                                        <Text style={styles.h3}>{entry.calories.toFixed(0)} Cal</Text>
+                                        <Text style={styles.h3}>{entry.protien.toFixed(0)}g Pt</Text>
+                                        <Text style={styles.h3}>{entry.carbs.toFixed(0)}g C</Text>
+                                        <Text style={styles.h3}>{entry.fat.toFixed(0)}g F</Text>
                                     </View>
                                 </View>
                             )
@@ -220,7 +249,7 @@ export default function Track({user, memoizedSetUser}: TrackProps){
                     <View style={styles.leftContainerTrans}>
                         <View style={styles.horizontalContainer2}>
                             <Text style={styles.h2}>Dinner</Text>
-                            <Text style={styles.h3}>{todayInformation.dinner.reduce((accumulator, currentValue) => accumulator + currentValue.calories, 0)} Calories</Text>
+                            <Text style={styles.h3}>{todayInformation.dinner.reduce((accumulator, currentValue) => accumulator + currentValue.calories, 0).toFixed(2)} Calories</Text>
                         </View>
                         {todayInformation.dinner.length > 0 && todayInformation.dinner.map((entry) => {
                             return (
@@ -229,10 +258,10 @@ export default function Track({user, memoizedSetUser}: TrackProps){
                                         <Text style={styles.h3}><Text style={{fontWeight: "bold"}}>{entry.title}</Text></Text>
                                     </View>
                                     <View style={styles.horizontalContainer2}>
-                                        <Text style={styles.h3}>{entry.calories} Calories</Text>
-                                        <Text style={styles.h3}>{entry.protien}g Protien</Text>
-                                        <Text style={styles.h3}>{entry.carbs}g Carbs</Text>
-                                        <Text style={styles.h3}>{entry.fat}g Fat</Text>
+                                        <Text style={styles.h3}>{entry.calories.toFixed(0)} Cal</Text>
+                                        <Text style={styles.h3}>{entry.protien.toFixed(0)}g Pt</Text>
+                                        <Text style={styles.h3}>{entry.carbs.toFixed(0)}g C</Text>
+                                        <Text style={styles.h3}>{entry.fat.toFixed(0)}g F</Text>
                                     </View>
                                 </View>
                             )
@@ -245,7 +274,7 @@ export default function Track({user, memoizedSetUser}: TrackProps){
                     <View style={styles.leftContainerTrans}>
                         <View style={styles.horizontalContainer2}>
                             <Text style={styles.h2}>Snacks / Dessert</Text>
-                            <Text style={styles.h3}>{todayInformation.snacks.reduce((accumulator, currentValue) => accumulator + currentValue.calories, 0)} Calories</Text>
+                            <Text style={styles.h3}>{todayInformation.snacks.reduce((accumulator, currentValue) => accumulator + currentValue.calories, 0).toFixed(2)} Calories</Text>
                         </View>
                         {todayInformation.snacks.length > 0 && todayInformation.snacks.map((entry) => {
                             return (
@@ -254,10 +283,10 @@ export default function Track({user, memoizedSetUser}: TrackProps){
                                         <Text style={styles.h3}><Text style={{fontWeight: "bold"}}>{entry.title}</Text></Text>
                                     </View>
                                     <View style={styles.horizontalContainer2}>
-                                        <Text style={styles.h3}>{entry.calories} Calories</Text>
-                                        <Text style={styles.h3}>{entry.protien}g Protien</Text>
-                                        <Text style={styles.h3}>{entry.carbs}g Carbs</Text>
-                                        <Text style={styles.h3}>{entry.fat}g Fat</Text>
+                                        <Text style={styles.h3}>{entry.calories.toFixed(0)} Cal</Text>
+                                        <Text style={styles.h3}>{entry.protien.toFixed(0)}g Pt</Text>
+                                        <Text style={styles.h3}>{entry.carbs.toFixed(0)}g C</Text>
+                                        <Text style={styles.h3}>{entry.fat.toFixed(0)}g F</Text>
                                     </View>
                                 </View>
                             )
@@ -280,6 +309,23 @@ export default function Track({user, memoizedSetUser}: TrackProps){
                             <Text style={styles.h2}>Add an entry for {addFood.breakfast ? "breakfast" : addFood.lunch ? "lunch" : addFood.dinner ? "dinner" : "snacks"}</Text>
 
                             <SearchMain newEntry={newEntry} setNewEntry={setNewEntry}/>
+
+                            <Text style={styles.h3}>OR</Text>
+
+                            {newEntry && newEntry.uniqId == 'meal' && <Text style={styles.error}>Currently Selected Meal: {newEntry.label}</Text>}
+
+
+                            {user.meals && user.meals.map((meal) => {
+                                return (
+                                    <TouchableOpacity key={meal.title} style={styles.buttonH3} onPress={() => setNewEntry({
+                                        label: meal.title,
+                                        uniqId: "meal",
+                                        measureUri: "meal"
+                                    })}>
+                                        <Text style={styles.subButtonText}>{meal.title} : 1 serving</Text>
+                                    </TouchableOpacity>
+                                )
+                            })}
 
                             <TouchableOpacity style={styles.subButton} onPress={() => submitEntry()}>
                                 <Text style={styles.subButtonText}>Submit</Text>
