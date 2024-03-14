@@ -40,35 +40,11 @@ export default function Profile({user, memoizedSetUser}: ProfileProps){
                 resetScrollToCoords={{ x: 0, y: 0 }}   
                 scrollEnabled={true}>
 
-                <View style={styles.container}>
-                    <Text style={styles.h1}>Welcome, {user.username}</Text>
-
-                    {user.openaikey ? (
-                        <View style={styles.container}>
-                            <Text style={styles.h2}>Your openaikey: {user.openaikey.substring(0,6) + "..."}</Text>
-                            <Text style={styles.h2}>Change key below</Text>
-                            <View style={styles.rightContainer}>
-                                <TextInput style={styles.subInput} onChangeText={(text) => {setOpenaiKey(text)}} value={openaikey} placeholder="Sx-..."></TextInput>
-                                <TouchableOpacity style={styles.subButton} onPress={() => handleOpenaiKeyChange()}>
-                                    <Text style={styles.subButtonText}>Submit</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    ):(
-                        <View style={styles.container}>
-                            <Text style={styles.h2}>Set your openaikey key below</Text>
-                            <View style={styles.rightContainer}>
-                                <TextInput style={styles.subInput} onChangeText={(text) => {setOpenaiKey(text)}} value={openaikey} placeholder="Sx-..."></TextInput>
-                                <TouchableOpacity style={styles.subButton} onPress={() => handleOpenaiKeyChange()}>
-                                    <Text style={styles.subButtonText}>Submit</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    )}
+                <View style={styles.gappedContainer}>
+                    <Text style={styles.h2}>Welcome, {user.username}</Text>
                     
-                    
-                    <TouchableOpacity style={styles.button} onPress={() => logout()}>
-                        <Text style={styles.buttonText}>Sign Out</Text>
+                    <TouchableOpacity style={styles.subButton} onPress={() => logout()}>
+                        <Text style={styles.h3}>Sign Out</Text>
                     </TouchableOpacity>
 
 

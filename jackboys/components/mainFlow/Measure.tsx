@@ -28,7 +28,7 @@ export default function Measure({user, memoizedSetUser}: MeasureProps){
         const displayItems: DisplayEntry[] = [];
         const lastWeek = moment().subtract(7, 'days')
 
-        user.entries.forEach((entry) => {
+        user.entries && user.entries.forEach((entry) => {
             if (moment(entry.date).isAfter(lastWeek)){
                 displayItems.push({
                     value: parseFloat(entry.weight),

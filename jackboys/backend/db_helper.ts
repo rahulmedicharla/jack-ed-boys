@@ -54,7 +54,14 @@ export type User = {
             carbs: number,
             fat: number,
             numberOfServings: number
-    }[] | null
+    }[] | null,
+    exercise: {
+        label: string,
+        sets: number,
+        reps: number,
+        weight: number,
+        day: 'M' | 'T' | 'W' | 'Th' | 'F' | 'Sa' | 'Su' | null
+    }[] | null,
 } | null;
 
 export type dbReturnType = {
@@ -91,6 +98,30 @@ export type mealPrepType = {
     question: string | null,
     answer: string | null
 }
+
+export type NewExcercise = {
+    status: boolean,
+    day?: 'M' | 'T' | 'W' | 'Th' | 'F' | 'Sa' | 'Su' | null,
+    label?: string,
+    sets?: number,
+    reps?: number,
+    weight?: number,
+    error?: string | null,
+}
+
+export type ExercisePrep = {
+    exercises?: {
+        label: string,
+        sets: number,
+        reps: number,
+        weight: number,
+        day: 'M' | 'T' | 'W' | 'Th' | 'F' | 'Sa' | 'Su'
+    }[],
+    error?: string,
+    question?: string,
+    answer?: string
+}
+
 
 export const getNutritionInformation = async (newEntry: {
     label: string,
@@ -274,6 +305,76 @@ export const removeMealEntry = async(user: User, title: string) => {
         const returnVal: dbReturnType = {
             status: 'success',
             data: updatedUser.meals
+        }
+
+        return returnVal
+
+    }catch(e){
+        const returnVal: dbReturnType = {
+            status:'error',
+            error: e.message,
+
+        }
+        return returnVal
+    }
+}
+
+export const addExerciseEntry = async(user: User, newExercise: NewExcercise) => {
+    const db = getFirestore()
+
+    try{
+        let updatedUser: User = user
+
+        if(updatedUser.exercise){
+            updatedUser.exercise.push({
+                label: newExercise.label,
+                sets: newExercise.sets,
+                reps: newExercise.reps,
+                weight: newExercise.weight,
+                day: newExercise.day
+            })
+        }else{
+            updatedUser.exercise = [{
+                    label: newExercise.label,
+                    sets: newExercise.sets,
+                    reps: newExercise.reps,
+                    weight: newExercise.weight,
+                    day: newExercise.day
+                }]
+        }
+
+        await setDoc(doc(db, "Users", user.uid), updatedUser)
+    
+        const returnVal: dbReturnType = {
+            status: 'success',
+            data: updatedUser
+        }
+
+        return returnVal
+
+    }catch(e){
+        const returnVal: dbReturnType = {
+            status:'error',
+            error: e.message,
+
+        }
+        return returnVal
+    }
+}
+
+export const removeExerciseEntry = async(user: User, label: string) => {
+    const db = getFirestore()
+
+    try{
+        let updatedUser: User = user
+
+        updatedUser.exercise = updatedUser.exercise.filter((item) => item.label != label)
+
+        await setDoc(doc(db, "Users", user.uid), updatedUser)
+    
+        const returnVal: dbReturnType = {
+            status: 'success',
+            data: updatedUser
         }
 
         return returnVal

@@ -16,6 +16,7 @@ import Meal from "./mainFlow/Meal";
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { User, readUserDoc } from "../backend/db_helper";
+import Excercise from "./mainFlow/Excercise";
 
 
 const AuthStack = createNativeStackNavigator()
@@ -37,7 +38,8 @@ export default function Navigation() {
       openaikey: userData.data.openaikey ? userData.data.openaikey : null,
       calorieInformation: userData.data.calorieInformation ? userData.data.calorieInformation : null, 
       nutritionInformation: userData.data.nutritionInformation ? userData.data.nutritionInformation : null,
-      meals: userData.data.meals ? userData.data.meals : null
+      meals: userData.data.meals ? userData.data.meals : null,
+      exercise: userData.data.exercise ? userData.data.exercise : null,
     });
   }
 
@@ -73,6 +75,11 @@ export default function Navigation() {
                 <Ionicons name="fast-food" size={size} color={color} />
               )}}>
                 {() => <Meal user={user} memoizedSetUser={memoizedSetUser} />}
+              </HomeTab.Screen>
+              <HomeTab.Screen name = "Exercise" options={{headerShown: false, tabBarLabel: "Exercise", tabBarIcon: ({color, size}) => (
+                <MaterialCommunityIcons name="dumbbell" size={size} color={color} />
+              )}}>
+                {() => <Excercise user={user} memoizedSetUser={memoizedSetUser} />}
               </HomeTab.Screen>
               <HomeTab.Screen name="Profile" options = {{headerShown: false, tabBarLabel: "Profile", tabBarIcon: ({color, size}) => (
                 <MaterialIcons name="person" size={size} color={color} />

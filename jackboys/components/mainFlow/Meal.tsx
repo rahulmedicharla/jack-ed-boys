@@ -181,7 +181,7 @@ export default function Meal({user, memoizedSetUser}: MealProps){
             resetScrollToCoords={{ x: 0, y: 0 }}   
             scrollEnabled={true}>
 
-                <View style={styles.topContainer}>
+                <View style={styles.gappedContainer}>
                     <Text style={styles.h2}>Plan your meals</Text>
                     <TouchableOpacity onPress={() => toggleModal()}>
                         <Text style={[styles.buttonH3, styles.h3]}>+  Create a new meal</Text>
