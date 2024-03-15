@@ -33,7 +33,17 @@ I utilized a food nutrition api to get nutrition information for different ingre
 
 Lastly, I wanted to provide a feature where users could use the common ingredients from the food API to create their own meals and track those as well. I also used AI to give assistance to users in their meal preparation.
 
-Shown below are the images from the demo
+Shown below are the images from the demo.
+
+<div style="display: flex; flex-direction: row">
+  <img src="https://github.com/rahulmedicharla/jackboys/assets/46610295/d0600a19-5cf0-42a3-8a4a-14e5e7d0c1cb" width = 200/>
+  <img src="https://github.com/rahulmedicharla/jackboys/assets/46610295/8eab9a6b-5f7f-45b0-8357-3d9b2df32de1" width = 200/>
+  <img src="https://github.com/rahulmedicharla/jackboys/assets/46610295/1e0ffe3e-23ca-42c6-b9b0-d8a77022429c" width = 200/>
+</div>
+<div style="display: flex; flex-direction: row">
+  <img src="https://github.com/rahulmedicharla/jackboys/assets/46610295/ba9a7470-0842-405d-8473-28beff26c07d" width = 200/>
+  <img src="https://github.com/rahulmedicharla/jackboys/assets/46610295/f6a73dec-5a79-49c4-9837-178f39c8987f" width = 200/> 
+</div>)
 
 
 
